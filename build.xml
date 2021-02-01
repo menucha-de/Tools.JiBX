@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<project name="havis.tools.jibx" default="publish" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property file="${basedir}/build.properties" />
+	<property name="basename" value="${ant.project.name}" />
+	<property name="build.dir" location="${basedir}/target" />
+	<property name="build.dir.classes" location="${build.dir}/classes" />
+	<property name="doc.dir" location="${build.dir}/doc" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="resources.dir" location="${basedir}/src/main/resources" />
+	<property name="src.dir" location="${basedir}/src/main/java" />
+	<property file="${resources.dir}/build.properties" />
+
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- Checks if the build properties are set prints an error message otherwise -->
+	<target name="check.build.properties">
+		<condition property="ivy.resolver" else="local">
+			<isset property="ivy.resolver" />
+		</condition>
+		<fail message="Missing property 'api.url'. Does 'build.properties' file exists?" unless="api.url" />
+		<fail message="Missing property 'ivy.url'. Does 'build.properties' file exists?" unless="ivy.url" />
+	</target>
+
+	<target name="clean-cache" description="Cleans ivy cache">
+		<ivy:cleancache />
+	</target>
+
+	<target name="clean" depends="clean-cache" description="Cleans the project">
+		<delete dir="${build.dir}" includeemptydirs="true" />
+		<delete dir="${lib.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="retrieve">
+		<ivy:retrieve />
+	</target>
+
+	<!-- Compiles the java source code using javac -->
+	<target name="compile" depends="check.build.properties, retrieve">
+		<mkdir dir="${build.dir.classes}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir.classes}" debug="on" includeantruntime="false">
+			<classpath>
+				<!-- build libraries -->
+				<path refid="build.classpath" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates the binary JAR">
+		<!-- create binary JAR -->
+		<jar jarfile="${build.dir}/${basename}.jar" update="true" basedir="${build.dir.classes}" />
+	</target>
+
+	<target name="jar-src" depends="compile" description="Creates the source JAR">
+		<!-- create source JAR -->
+		<jar jarfile="${build.dir}/${basename}-sources.jar" update="true" basedir="${src.dir}" />
+	</target>
+
+	<target name="jar-doc">
+		<!-- create javadoc JAR -->
+		<javadoc destdir="${doc.dir}" author="true" version="true" use="true" windowtitle="${javadoc.windowtitle}" doctitle="${javadoc.doctitle}" bottom="${javadoc.buttom}">
+			<packageset dir="${src.dir}" defaultexcludes="yes" />
+			<classpath refid="build.classpath" />
+			<group title="Packages" packages="${basename}.*" />
+			<link offline="true" href="http://docs.oracle.com/javase/7/docs/api/" packagelistURL="${api.url}/javase/7/" />
+			<link offline="true" href="http://jibx.sourceforge.net/api/" packagelistURL="${api.url}/jibx/" />
+			<link offline="true" href="http://help.eclipse.org/juno/topic/org.eclipse.jdt.doc.isv/reference/api/" packagelistURL="${api.url}/jdt/" />
+		</javadoc>
+		<jar jarfile="${build.dir}/${basename}-javadoc.jar" update="true" basedir="${doc.dir}" />
+	</target>
+
+	<target name="publish" depends="jar, jar-src, jar-doc" description="Publishes the JAR to the repository">
+		<ivy:resolve file="${resources.dir}/ivy.xml" />
+
+		<ivy:publish resolver="${ivy.resolver}" pubrevision="${manifest.Implementation-Version}" status="integration" overwrite="true">
+			<artifacts pattern="${build.dir}/[artifact].[ext]" />
+		</ivy:publish>
+	</target>
+
+</project>

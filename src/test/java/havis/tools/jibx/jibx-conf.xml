@@ -1,0 +1,32 @@
+<schema-set>
+	<schema-set package="havis.tools.jibx" names="*.xsd">
+		<class-decorator match-name="ConstructorType" params="int id, String name"
+			class="havis.tools.jibx.ConstructorDecorator" />
+		<class-decorator match-name="EnumType"
+			class="havis.tools.jibx.EnumDecorator" params="ONE(1),TWO(2), THREE(3)" />
+		<class-decorator match-name="EqualsType" params="id, name"
+			class="havis.tools.jibx.EqualsDecorator" />
+		<class-decorator match-name="MoveType"
+			class="havis.tools.jibx.MoveDecorator" />
+		<class-decorator class="org.jibx.schema.codegen.extend.ExtensionDecorator"
+			match-name="SuperConstructorType" base-class="java.lang.Exception" />
+		<class-decorator match-name="SuperConstructorType"
+			params="String message, Throwable cause" class="havis.tools.jibx.SuperConstructorDecorator" />
+		<class-decorator match-name="EntryType"
+			class="havis.tools.jibx.CloneDecorator" />
+		<class-decorator match-name="ListType" includes="entryList"
+			class="havis.tools.jibx.CloneDecorator" />
+		<class-decorator match-name="CloneType" excludes="id, name"
+			class="havis.tools.jibx.CloneDecorator" />
+        <class-decorator match-name="EntryType"
+            class="havis.tools.jibx.ToStringDecorator" />
+        <class-decorator match-name="ListType"
+            class="havis.tools.jibx.ToStringDecorator" />
+        <class-decorator match-name="StringListType"
+            class="havis.tools.jibx.ToStringDecorator" />
+        <class-decorator match-name="ToStringType"
+            class="havis.tools.jibx.ToStringDecorator" />
+        <class-decorator match-name="ToStringExtendType"
+            class="havis.tools.jibx.ToStringDecorator" />
+	</schema-set>
+</schema-set>

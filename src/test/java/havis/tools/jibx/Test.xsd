@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:havis="urn:havis:tools:jibx:xsd:1" targetNamespace="urn:havis:tools:jibx:xsd:1"
+	elementFormDefault="unqualified" attributeFormDefault="unqualified"
+	version="1.0">
+
+	<xsd:complexType name="ConstructorType">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:int" />
+			<xsd:element name="name" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="EnumType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ONE" />
+			<xsd:enumeration value="TWO" />
+			<xsd:enumeration value="THREE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="EqualsType">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:int" />
+			<xsd:element name="name" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MoveType">
+		<xsd:sequence>
+			<xsd:element name="list" maxOccurs="unbounded" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="SuperConstructorType" />
+
+	<xsd:complexType name="EntryType" />
+
+	<xsd:complexType name="ListType">
+		<xsd:sequence>
+			<xsd:element name="entry" type="havis:EntryType"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="CloneType">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:int" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="entry" type="havis:EntryType" />
+			<xsd:element name="list" type="havis:ListType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+    <xsd:complexType name="ToStringType">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:int" />
+            <xsd:element name="name" type="xsd:string" />
+            <xsd:element name="entry" type="havis:EntryType" />
+            <xsd:element name="list" type="havis:ListType" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="ToStringExtendType">
+        <xsd:complexContent>
+            <xsd:extension base="ToStringType">
+                <xsd:sequence>
+                    <xsd:element name="address" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    
+    <xsd:complexType name="StringListType">
+        <xsd:sequence>
+            <xsd:element name="entry" type="xsd:string"
+                maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
