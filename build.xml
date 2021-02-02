@@ -74,7 +74,7 @@
 	<target name="publish" depends="jar, jar-src, jar-doc" description="Publishes the JAR to the repository">
 		<ivy:resolve file="${resources.dir}/ivy.xml" />
 
-		<ivy:publish resolver="${ivy.resolver}" pubrevision="${manifest.Implementation-Version}" status="integration" overwrite="true">
+		<ivy:publish resolver="${ivy.resolver}" pubrevision="${manifest.Bundle-Version}" status="integration" overwrite="true">
 			<artifacts pattern="${build.dir}/[artifact].[ext]" />
 		</ivy:publish>
 	</target>
